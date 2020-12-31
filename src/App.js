@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 const api = {
   key: "4e432a2035b14955f43abf759c8d2021",
   base: "https://api.openweathermap.org/data/2.5/"
@@ -17,6 +18,17 @@ function App() {
           setQuery('');
           console.log(result);
         });
+    }
+  }
+
+  const search1 = evt => {
+    if (evt.key === "Enter") {
+      axios.get(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
+      .then(response => {
+        setWeather(response.data);
+        setQuery('');
+        console.log(response.data);
+      })
     }
   }
 
@@ -42,13 +54,31 @@ function App() {
             placeholder="Search..."
             onChange={e => setQuery(e.target.value)}
             value={query}
-            onKeyPress={search}
+            /* onKeyPress={search}
           />
         </div>
         {(typeof weather.main != "undefined") ? (
         <div>
           <div className="location-box">
             <div className="location">{weather.name}, {weather.sys.country}</div>
+            <div className="date">{dateBuilder(new Date())}</div>
+          </div>
+          <div className="weather-box">
+            <div className="temp">
+              {Math.round(weather.main.temp)}°c
+            </div>
+            <div className="weather">{weather.weather[0].main}</div>
+          </div>
+        </div>
+        ) : ('')} */
+            onKeyPress={search1}
+            
+          />
+        </div>
+        {(typeof weather.main != "undefined") ? (
+        <div>
+          <div className="location-box">
+            <div className="location">{weather.name} {weather.sys.country}</div>
             <div className="date">{dateBuilder(new Date())}</div>
           </div>
           <div className="weather-box">
